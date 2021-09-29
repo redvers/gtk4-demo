@@ -1,0 +1,37 @@
+{
+  "packages": [],
+  "deps": [
+    {
+      "locator": "../pony-gtk4",
+      "version": ""
+    },
+    {
+      "locator": "../pony-glib",
+      "version": ""
+    },
+    {
+      "locator": "../pony-graphene",
+      "version": ""
+    },
+    {
+      "locator": "../pony-pango",
+      "version": ""
+    },
+    {
+      "locator": "../pony-cairo",
+      "version": ""
+    },
+    {
+      "locator": "../pony-graphene",
+      "version": ""
+    }
+  ],
+  "info": {
+    "description": "Pony implementation of gtk4-demo",
+    "homepage": "",
+    "license": "",
+    "documentation_url": "",
+    "version": "0.1",
+    "name": "gtk4-demo"
+  }
+}
