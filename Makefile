@@ -1,5 +1,5 @@
 all:
-	corral run -- ponyc -d .
+	corral run -- ponyc --files -d .
 	./gtk4-demo
 
 c:
