@@ -79,63 +79,24 @@ class AppState is PonyGtkApplication
     let search_bar: NullablePointer[SGtkWidget] = builder.get_object("searchbar")
     GLibSys.g_signal_connect_data[AppState](search_bar, "notify::search-mode-enabled".cstring(), @{(gsa: NullablePointer[GSimpleAction], gva: NullablePointer[GVariant], data: AppState): None => data.clear_search()}, this, Pointer[None], I32(0))
 
-    var gpo: GPonyObject[PonyTypeA] = GPonyObject[PonyTypeA](PonyTypeA)
-
-/*    var gtypeinfo: GTypeInfo = GTypeInfo
-    gtypeinfo.class_size = U16(1216)
-    gtypeinfo.class_init = @{(g_class: NullablePointer[GPonyClass], class_data: Pointer[None]): None =>
-      @printf("class_init()\n".cstring())
-              try
-                var gpc: GPonyClass = g_class.apply()?
-                gpc.set_property = @{(g_object: GObject, property_id: U32, value: GValue, pspec: GParamSpec): None => @printf("In set_property()\n".cstring())}
-                gpc.get_property = @{(g_object: NullablePointer[GPony], property_id: U32, value: NullablePointer[GValue], pspec: NullablePointer[GParamSpec]): None =>
-                    @printf("In get_property()\n".cstring())
-                    try
-                      g_object.apply()?.ponyref.geta(value)
-                    end
-                }
-              end
-              let pspec: NullablePointer[GParamSpec] = GLibSys.g_param_spec_string("name".cstring(), "nick".cstring(), "blurb".cstring(), "default_value".cstring(), I32(3))
-              GLibSys.g_object_class_install_property(g_class, U32(1), pspec)
-      }
-    gtypeinfo.instance_size = U16(192)
-    gtypeinfo.instance_init = @{(instance: NullablePointer[GPony], g_class: NullablePointer[GPonyClass]): None =>
-              @printf("instance_init()\n".cstring())
-              let p: PonyProperties = PonyProperties
-              try
-                let i: GPony = instance.apply()?
-                i.ponyref = p
-              else
-                @printf("I aborted in instance_init()\n".cstring())
-              end
-
-    }
-
-    var myglibtype: GType = GLibSys.g_type_register_static(GLibSys.g_object_get_type(), "GPony".cstring(), NullablePointer[GTypeInfo](gtypeinfo), I32(0))
-
-
-    let listmodel: NullablePointer[GListStore] = create_demo_model(myglibtype)
-    Debug.out("glib value: " + myglibtype.string())
-    Debug.out("glibtested value: " + ss.string())
-
+    let listmodel: NullablePointer[GListStore] = create_demo_model()
     let treemodel: NullablePointer[SGtkTreeListModel] = Gtk4TreeListModel.gnew(listmodel, I32(0), I32(1), @{(lm: NullablePointer[GListStore]): NullablePointer[GListStore] => NullablePointer[GListStore].none()}, listmodel, Pointer[None])
     // ^^^^ We'll keep the child object a NULL because we're not going to start with a tree ^^^^ //
 
     var selection: NullablePointer[SGtkSingleSelection] = Gtk4SingleSelection.gnew(treemodel)
     Gtk4ListView.set_model(listview, selection)
 
-*/
-//    Debug.out(tgpo.ponyclass)
 
 
+    window.show()
 
-//    window.show()
+	fun create_demo_model(): NullablePointer[GListStore] =>
+    // We need to create at least one object to register the type with
+    // GLib
+    var gpo: GPonyObject[PonyTypeA] = GPonyObject[PonyTypeA](PonyTypeA)
+    let store: NullablePointer[GListStore] = GLibSys.g_list_store_new(gpo.glibtype)
 
-	fun create_demo_model(myglibtype: GType): NullablePointer[GListStore] =>
-    let store: NullablePointer[GListStore] = GLibSys.g_list_store_new(myglibtype)
-    let d: NullablePointer[GObject] = GLibSys.g_object_new(myglibtype)
-
-    GLibSys.g_list_store_append(store, d)
+    GLibSys.g_list_store_append(store, gpo.instance)
 
     Debug("I DIDN'T SEGV!")
 //    @foo()
@@ -178,3 +139,4 @@ class PonyTypeA is GPonyType
 
 class PonyTypeB is GPonyType
   fun apply(): String => __loc.type_name()
+
