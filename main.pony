@@ -94,6 +94,12 @@ class AppState is PonyGtkApplication
     // We need to create at least one object to register the type with
     // GLib
     var gpo: GPonyObject[PonyTypeA] = GPonyObject[PonyTypeA](PonyTypeA)
+    let gv: GValue = GValue
+    let gvp: NullablePointer[GValue] = NullablePointer[GValue](gv)
+    GLibSys.g_value_init(gvp, GType(16 << 2)) // A String™
+    GLibSys.g_value_set_string(gvp, "Gtk-Demo".cstring())
+
+    GLibSys.g_object_set_property(gpo.getobj(), "name".cstring(), gvp)
     let store: NullablePointer[GListStore] = GLibSys.g_list_store_new(gpo.glibtype)
 
     GLibSys.g_list_store_append(store, gpo.instance)
@@ -136,6 +142,7 @@ class AppState is PonyGtkApplication
 //
 class PonyTypeA is GPonyType
   fun apply(): String => __loc.type_name()
+
 
 class PonyTypeB is GPonyType
   fun apply(): String => __loc.type_name()
