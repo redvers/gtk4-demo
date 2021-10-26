@@ -111,7 +111,7 @@ class AppState is PonyGtkApplication
 
     GLibSys.g_list_store_append(store, gpo.instance)
     GLibSys.g_list_store_append(store, make_entry(ApplicationClassDemo.name(), ApplicationClassDemo~callback(), ApplicationClassDemo~selected()).instance)
-    GLibSys.g_list_store_append(store, make_entry("Assistant",                 this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry(AssistantDemo.name(),        AssistantDemo~callback(),        AssistantDemo~selected()).instance)
     GLibSys.g_list_store_append(store, make_entry("Benchmark / Fishbowl",      this~callback(), this~selected()).instance)
     GLibSys.g_list_store_append(store, make_entry("Benchmark / Frames",        this~callback(), this~selected()).instance)
     GLibSys.g_list_store_append(store, make_entry("Benchmark / Scrolling",     this~callback(), this~selected()).instance)
