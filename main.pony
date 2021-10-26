@@ -110,10 +110,21 @@ class AppState is PonyGtkApplication
     let store: NullablePointer[GListStore] = GLibSys.g_list_store_new(gpo.glibtype)
 
     GLibSys.g_list_store_append(store, gpo.instance)
-    gpo = make_entry("Application Class", @{(a: AppState) => None}, @{(a: AppState) => None})
-    GLibSys.g_list_store_append(store, gpo.instance)
-    gpo = make_entry("Assistant", @{(a: AppState) => None}, @{(a: AppState) => None})
-    GLibSys.g_list_store_append(store, gpo.instance)
+    GLibSys.g_list_store_append(store, make_entry(ApplicationClassDemo.name(), ApplicationClassDemo~callback(), ApplicationClassDemo~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Assistant",                 this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Benchmark / Fishbowl",      this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Benchmark / Frames",        this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Benchmark / Scrolling",     this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Benchmark / Themes",        this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Builder",                   this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Constraints / Simple",      this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Constraints / Interactive", this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Constraints / VFL",         this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Constraints / Builder",     this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Cursors",                   this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Dialogs",                   this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Drag-and-Drop",             this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry("Drawing Area", @{(a: AppState) => None}, @{(a: AppState) => None}).instance)
 
     Debug("I DIDN'T SEGV!")
 //    @foo()
@@ -133,6 +144,18 @@ class AppState is PonyGtkApplication
     GLibSys.g_value_init(gvp, GType(16 << 2)) // A String™
     GLibSys.g_value_set_string(gvp, str.cstring())
     gvp
+
+  fun @callback(appstate: AppState): None =>
+    None
+
+  fun @selected(appstate: AppState): None =>
+    let descr: String = """
+                          This has not been implemented yet.
+                        """
+    @printf("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ\n".cstring())
+
+    Gtk4TextBuffer.set_text(appstate.infobuffer, descr.cstring(), descr.size().i32())
+
 
 
 
