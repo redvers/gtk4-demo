@@ -1,5 +1,6 @@
 use @g_action_map_add_action[None](action_map: NullablePointer[GObject] tag, action: NullablePointer[GAction])
-use @g_action_map_add_action_entries[None](action_map: NullablePointer[GObject], entries: GPonyAction, n_entries: I32, user_data: Any)
+//use @g_action_map_add_action_entries[None](action_map: NullablePointer[GObject], entries: GPonyAction, n_entries: I32, user_data: Any)
+use @g_action_map_add_action_entries[None](action_map: NullablePointer[GObject], entries: GActionEntry, n_entries: I32, user_data: Any)
 use @printf[I32](fmt: Pointer[U8] tag, ...)
 
 use "Gtk"
@@ -62,15 +63,15 @@ class AppState is PonyGtkApplication
     Gtk4TextBuffer.set_text(infobuffer, "Test text".cstring(), I32(9))
     Gtk4TextView.set_buffer(infoview, infobuffer)
 
-    var t: GPonyAction = GPonyAction
-    var u: GPonyAction = GPonyAction
-    var v: GPonyAction = GPonyAction
+    var t: GActionEntry = GActionEntry
+    var u: GActionEntry = GActionEntry
+    var v: GActionEntry = GActionEntry
     t.name = "about".cstring()
-		t.func = @{(action: NullablePointer[GSimpleAction], parameter: NullablePointer[GVariant], data: Any): None => @printf("In about fn callback\n".cstring())}
+    t.activate = @{(action: NullablePointer[GSimpleAction], parameter: NullablePointer[GVariant], data: Any): None => @printf("In about fn callback\n".cstring())}
     u.name = "quit".cstring()
-		u.func = @{(action: NullablePointer[GSimpleAction], parameter: NullablePointer[GVariant], data: Any): None => @printf("In quit fn callback\n".cstring())}
+    u.activate = @{(action: NullablePointer[GSimpleAction], parameter: NullablePointer[GVariant], data: Any): None => @printf("In about fn callback\n".cstring())}
     v.name = "inspector".cstring()
-		v.func = @{(action: NullablePointer[GSimpleAction], parameter: NullablePointer[GVariant], data: Any): None => Gtk4Window.set_interactive_debugging(I32(1))}
+    v.activate = @{(action: NullablePointer[GSimpleAction], parameter: NullablePointer[GVariant], data: Any): None => Gtk4Window.set_interactive_debugging(I32(1))}
 
     @g_action_map_add_action_entries(gtkapp.getobj(), t, I32(1), gtkapp)
     @g_action_map_add_action_entries(gtkapp.getobj(), u, I32(1), gtkapp)
@@ -116,7 +117,7 @@ class AppState is PonyGtkApplication
     GLibSys.g_list_store_append(store, make_entry("Benchmark / Frames",        this~callback(), this~selected()).instance)
     GLibSys.g_list_store_append(store, make_entry("Benchmark / Scrolling",     this~callback(), this~selected()).instance)
     GLibSys.g_list_store_append(store, make_entry("Benchmark / Themes",        this~callback(), this~selected()).instance)
-    GLibSys.g_list_store_append(store, make_entry("Builder",                   this~callback(), this~selected()).instance)
+    GLibSys.g_list_store_append(store, make_entry(BuilderDemo.name(),          BuilderDemo~callback(),          BuilderDemo~selected()).instance)
     GLibSys.g_list_store_append(store, make_entry("Constraints / Simple",      this~callback(), this~selected()).instance)
     GLibSys.g_list_store_append(store, make_entry("Constraints / Interactive", this~callback(), this~selected()).instance)
     GLibSys.g_list_store_append(store, make_entry("Constraints / VFL",         this~callback(), this~selected()).instance)
